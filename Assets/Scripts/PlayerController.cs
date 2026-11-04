@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 	[SerializeField] float rayLength = 0.7f;
 	public LayerMask groundLayer;
 	private Rigidbody2D rb;
+	private SpriteRenderer sp;
 
 	private InputSystem_Actions inputActions;
 	private RaycastHit2D hit;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 	private void Awake()
 	{
 		rb = GetComponent<Rigidbody2D>();
+		sp = GetComponent<SpriteRenderer>();
 		inputActions = new InputSystem_Actions();
 		inputActions.PlayerControls.SetCallbacks(this);
 		animator = GetComponent<Animator>();
@@ -41,7 +43,18 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
     {
 		Debug.DrawRay(transform.position, Vector2.down * rayLength, Color.red);
 
-
+		switch (moveInput) 
+		{
+            case > 0:
+				sp.flipX = true;
+				break;
+			case < 0:
+				sp.flipX = false;
+				break;
+			case 0:
+				;
+				break;
+		}
 	}
 
 	void FixedUpdate()
