@@ -25,8 +25,8 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 	}
 
 	void Start()
-    {
-		
+	{
+
 	}
 
 	private void OnEnable()
@@ -40,12 +40,12 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 	}
 
 	void Update()
-    {
+	{
 		Debug.DrawRay(transform.position, Vector2.down * rayLength, Color.red);
 
-		switch (moveInput) 
+		switch (moveInput)
 		{
-            case > 0:
+			case > 0:
 				sp.flipX = false;
 				break;
 			case < 0:
@@ -71,8 +71,8 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 		return hit.collider != null;
 	}
 
-    public void OnGravity(InputAction.CallbackContext context)
-    {
+	public void OnGravity(InputAction.CallbackContext context)
+	{
 		if (context.performed && IsGrounded())
 		{
 			transform.localScale = new Vector3(transform.localScale.x, -transform.localScale.y, transform.localScale.z);
@@ -80,11 +80,12 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 		}
 	}
 
-    public void OnMovement(InputAction.CallbackContext context)
-    {
+	public void OnMovement(InputAction.CallbackContext context)
+	{
 		moveInput = context.ReadValue<Vector2>().x;
 
 		animator.SetFloat("speed", Mathf.Abs(moveInput));
 	}
-
+	
 }
+

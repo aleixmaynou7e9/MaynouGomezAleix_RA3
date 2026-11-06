@@ -1104,6 +1104,35 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "Canvas",
+            "id": "1a7d8b83-7bfe-4983-930f-108511c86722",
+            "actions": [
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "171f7c30-626c-4a3c-912b-d113a847fd2b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fb063bad-4e82-491e-929a-32462abfe524",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

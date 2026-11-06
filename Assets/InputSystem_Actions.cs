@@ -1190,6 +1190,35 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Canvas"",
+            ""id"": ""1a7d8b83-7bfe-4983-930f-108511c86722"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""171f7c30-626c-4a3c-912b-d113a847fd2b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""fb063bad-4e82-491e-929a-32462abfe524"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1282,6 +1311,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_PlayerControls = asset.FindActionMap("PlayerControls", throwIfNotFound: true);
         m_PlayerControls_Gravity = m_PlayerControls.FindAction("Gravity", throwIfNotFound: true);
         m_PlayerControls_Movement = m_PlayerControls.FindAction("Movement", throwIfNotFound: true);
+        // Canvas
+        m_Canvas = asset.FindActionMap("Canvas", throwIfNotFound: true);
+        m_Canvas_Pause = m_Canvas.FindAction("Pause", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1289,6 +1321,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_PlayerControls.enabled, "This will cause a leak and performance issues, InputSystem_Actions.PlayerControls.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Canvas.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Canvas.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1846,6 +1879,102 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerControlsActions" /> instance referencing this action map.
     /// </summary>
     public PlayerControlsActions @PlayerControls => new PlayerControlsActions(this);
+
+    // Canvas
+    private readonly InputActionMap m_Canvas;
+    private List<ICanvasActions> m_CanvasActionsCallbackInterfaces = new List<ICanvasActions>();
+    private readonly InputAction m_Canvas_Pause;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Canvas".
+    /// </summary>
+    public struct CanvasActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public CanvasActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Canvas/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Canvas_Pause;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Canvas; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="CanvasActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(CanvasActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="CanvasActions" />
+        public void AddCallbacks(ICanvasActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CanvasActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CanvasActionsCallbackInterfaces.Add(instance);
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="CanvasActions" />
+        private void UnregisterCallbacks(ICanvasActions instance)
+        {
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="CanvasActions.UnregisterCallbacks(ICanvasActions)" />.
+        /// </summary>
+        /// <seealso cref="CanvasActions.UnregisterCallbacks(ICanvasActions)" />
+        public void RemoveCallbacks(ICanvasActions instance)
+        {
+            if (m_Wrapper.m_CanvasActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="CanvasActions.AddCallbacks(ICanvasActions)" />
+        /// <seealso cref="CanvasActions.RemoveCallbacks(ICanvasActions)" />
+        /// <seealso cref="CanvasActions.UnregisterCallbacks(ICanvasActions)" />
+        public void SetCallbacks(ICanvasActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CanvasActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CanvasActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="CanvasActions" /> instance referencing this action map.
+    /// </summary>
+    public CanvasActions @Canvas => new CanvasActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -2081,5 +2210,20 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMovement(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Canvas" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="CanvasActions.AddCallbacks(ICanvasActions)" />
+    /// <seealso cref="CanvasActions.RemoveCallbacks(ICanvasActions)" />
+    public interface ICanvasActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
     }
 }
