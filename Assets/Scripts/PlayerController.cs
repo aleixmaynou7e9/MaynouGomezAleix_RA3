@@ -46,10 +46,10 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 		switch (moveInput) 
 		{
             case > 0:
-				sp.flipX = true;
+				sp.flipX = false;
 				break;
 			case < 0:
-				sp.flipX = false;
+				sp.flipX = true;
 				break;
 			case 0:
 				;
