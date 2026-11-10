@@ -1,35 +1,43 @@
 using UnityEngine;
 
-public class BackgroundMusic : MonoBehaviour
+[RequireComponent(typeof(AudioSource))]
+public class MusicManager : MonoBehaviour
 {
-	private static BackgroundMusic instance;
-	private AudioSource audioSource;
+    public static MusicManager instance;
+    private AudioSource audioSource;
 
-	private void Awake()
-	{
-		audioSource = GetComponent<AudioSource>();
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-		if (instance != null && instance != this)
-		{
-			if (audioSource != null)
-			{
-				audioSource.mute = true;
-				audioSource.Stop();
-				audioSource.enabled = false;
-			}
+        audioSource = GetComponent<AudioSource>();
+    }
 
-			gameObject.SetActive(false);
+    public void PauseMusic()
+    {
+        audioSource.Pause();
+    }
 
-			Destroy(gameObject);
-			return;
-		}
+    public void PlayMusic()
+    {
+        audioSource.Play();
+    }
 
-		instance = this;
-		DontDestroyOnLoad(gameObject);
-
-		if (audioSource != null && !audioSource.isPlaying)
-		{
-			audioSource.Play();
-		}
-	}
+    public void RestartMusic()
+    {
+        if (audioSource != null)
+        {
+            audioSource.Stop();
+            audioSource.Play();
+        }
+    }
 }

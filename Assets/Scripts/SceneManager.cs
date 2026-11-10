@@ -26,7 +26,31 @@ public class MySceneManager : MonoBehaviour
 		SceneManager.LoadScene("Level1");
 	}
 
-	public void Lose()
+	public void Level2()
+    {
+        UIManager.instance.ClosePause();
+        SceneManager.LoadScene("Level2");
+    }
+
+    public void Level3()
+    {
+        UIManager.instance.ClosePause();
+        SceneManager.LoadScene("Level3");
+    }
+
+	public void Level4()
+    {
+        UIManager.instance.ClosePause();
+        SceneManager.LoadScene("Level4");
+    }
+
+	public void RestartLevel() 
+	{
+        UIManager.instance.ClosePause();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void Lose()
 	{
 		SceneManager.LoadScene("LoseScene");
 	}
@@ -39,6 +63,12 @@ public class MySceneManager : MonoBehaviour
 	public void Intro()
 	{
 		UIManager.instance.ClosePause();
-		SceneManager.LoadScene("Home Menu");
+
+        if (MusicManager.instance != null)
+        {
+            MusicManager.instance.RestartMusic();
+        }
+
+        SceneManager.LoadScene("Home Menu");
 	}
 }

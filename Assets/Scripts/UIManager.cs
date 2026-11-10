@@ -62,12 +62,15 @@ public class UIManager : MonoBehaviour, InputSystem_Actions.ICanvasActions
 		pausePanel.SetActive(true);
 		Time.timeScale = 0f;
 		isPaused = true;
-	}
+
+        if (MusicManager.instance != null) MusicManager.instance.PauseMusic();
+    }
 	public void ClosePause()
 	{
 		pausePanel.SetActive(false);
 		Time.timeScale = 1f;
 		isPaused = false;
 
-	}
+        if (MusicManager.instance != null) MusicManager.instance.PlayMusic();
+    }
 }
