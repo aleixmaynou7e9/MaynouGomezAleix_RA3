@@ -50,12 +50,12 @@ public class MySceneManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void Lose()
+    public static void Lose()
 	{
-		SceneManager.LoadScene("LoseScene");
+		SceneManager.LoadScene("Game Over");
 	}
 
-	public void Win()
+	public static void Win()
 	{
 		SceneManager.LoadScene("WinScene");
 	}

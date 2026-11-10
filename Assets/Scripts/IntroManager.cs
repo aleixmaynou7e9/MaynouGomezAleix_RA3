@@ -8,4 +8,8 @@ public class IntroManager : MonoBehaviour
 		SceneManager.LoadScene("Level1");
 	}
 
+	public void Intro()
+	{
+		SceneManager.LoadScene("Home Menu");
+	}
 }

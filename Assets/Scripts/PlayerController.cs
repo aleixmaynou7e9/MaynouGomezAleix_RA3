@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerControlsActions
 {
@@ -69,6 +70,11 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 		Debug.DrawRay(transform.position, Vector2.down * rayLength, Color.red);
 
 		return hit.collider != null;
+	}
+
+	public static void Die() 
+	{
+		MySceneManager.Lose();
 	}
 
 	public void OnGravity(InputAction.CallbackContext context)
