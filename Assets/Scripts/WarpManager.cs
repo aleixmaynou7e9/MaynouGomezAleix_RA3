@@ -3,11 +3,21 @@ using UnityEngine.SceneManagement;
 
 public class WarpManager : MonoBehaviour
 {
+    [SerializeField] private AudioClip WarpSound;
+    private AudioSource audioSource;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             string currentScene = SceneManager.GetActiveScene().name;
+
+            AudioManager.instance.PlaySFX(WarpSound);
 
             if (currentScene == "Level1")
             {
@@ -20,6 +30,10 @@ public class WarpManager : MonoBehaviour
             else if (currentScene == "Level3")
             {
                 MySceneManager.instance.Level4();
+            }
+            else if (currentScene == "Level4")
+            {
+                MySceneManager.Win();
             }
         }
     }

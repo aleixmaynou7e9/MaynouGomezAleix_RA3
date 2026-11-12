@@ -4,9 +4,10 @@ using UnityEngine.SceneManagement;
 public class MySceneManager : MonoBehaviour
 {
 	public static MySceneManager instance;
+	public static bool youWin = false;
 
-	//Singleton
-	void Awake() 
+    //Singleton
+    void Awake() 
 	{
 		if (instance == null)
 		{
@@ -57,7 +58,8 @@ public class MySceneManager : MonoBehaviour
 
 	public static void Win()
 	{
-		SceneManager.LoadScene("WinScene");
+        youWin = true;
+        SceneManager.LoadScene("Game Over");
 	}
 
 	public void Intro()
