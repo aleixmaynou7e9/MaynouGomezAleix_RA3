@@ -66,10 +66,7 @@ public class MySceneManager : MonoBehaviour
 	{
 		UIManager.instance.ClosePause();
 
-        if (MusicManager.instance != null)
-        {
-            MusicManager.instance.RestartMusic();
-        }
+        MusicManager.instance.RestartMusic();
 
         SceneManager.LoadScene("Home Menu");
 	}

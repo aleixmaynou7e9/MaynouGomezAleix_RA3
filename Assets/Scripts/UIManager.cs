@@ -45,14 +45,18 @@ public class UIManager : MonoBehaviour, InputSystem_Actions.ICanvasActions
 
 	public void OnPause(InputAction.CallbackContext context)
 	{
-		if (SceneManager.GetActiveScene().buildIndex!=1) 
+		if (SceneManager.GetActiveScene().buildIndex!=0 && SceneManager.GetActiveScene().buildIndex != 1) 
 		{
-			if (context.performed && !isPaused)
+            Debug.Log("Scene correct");
+
+            if (context.performed && !isPaused)
 			{
-				OpenPause();
+				Debug.Log("Pause");
+                OpenPause();
 			}
 			else if (context.performed && isPaused)
 			{
+				Debug.Log("Resume");
 				ClosePause();
 			}
 		}
