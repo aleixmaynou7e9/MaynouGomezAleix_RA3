@@ -28,11 +28,6 @@ public class UIManager : MonoBehaviour, InputSystem_Actions.ICanvasActions
 	}
 	//Singleton
 
-	void Update()
-    {
-        
-    }
-
 	private void OnEnable()
 	{
 		inputActions.Enable();
