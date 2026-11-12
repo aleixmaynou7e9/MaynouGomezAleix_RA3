@@ -15,12 +15,13 @@ public class ProjectilePool : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
+            return;
         }
+
         for (int i = 0; i < initialSize; i++)
         {
             Projectile projectile = CreateProjectile();
@@ -37,13 +38,14 @@ public class ProjectilePool : MonoBehaviour
 
     public Projectile GetProjectile(Vector3 position, Quaternion rotation)
     {
-        Projectile projectileToUse;
+        Projectile projectileToUse = null;
 
-        if (pool.Count > 0)
+        while (pool.Count > 0 && projectileToUse == null)
         {
             projectileToUse = pool.Pop();
         }
-        else
+
+        if (projectileToUse == null)
         {
             projectileToUse = CreateProjectile();
         }
@@ -56,7 +58,10 @@ public class ProjectilePool : MonoBehaviour
 
     public void ReturnProjectile(Projectile projectile)
     {
+        if (projectile == null) return;
+
         projectile.gameObject.SetActive(false);
+        projectile.transform.SetParent(transform);
         pool.Push(projectile);
     }
 }

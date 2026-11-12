@@ -12,7 +12,6 @@ public class MySceneManager : MonoBehaviour
 		if (instance == null)
 		{
 			instance = this;
-			DontDestroyOnLoad(gameObject);
 		}
 		else
 		{
@@ -45,10 +44,12 @@ public class MySceneManager : MonoBehaviour
         SceneManager.LoadScene("Level4");
     }
 
-	public void RestartLevel() 
-	{
+    public void RestartLevel()
+    {
         UIManager.instance.ClosePause();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
+        UIManager.instance.isPaused = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public static void Lose()

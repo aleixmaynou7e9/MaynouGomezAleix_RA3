@@ -19,7 +19,6 @@ public class UIManager : MonoBehaviour, InputSystem_Actions.ICanvasActions
 		if (instance == null)
 		{
 			instance = this;
-			DontDestroyOnLoad(gameObject);
 		}
 		else
 		{
