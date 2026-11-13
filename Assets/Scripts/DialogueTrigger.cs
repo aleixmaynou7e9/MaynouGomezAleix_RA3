@@ -1,5 +1,5 @@
 using UnityEngine;
-using TMPro; // Si usas TextMeshPro
+using TMPro;
 
 public class DialogueTrigger : MonoBehaviour
 {

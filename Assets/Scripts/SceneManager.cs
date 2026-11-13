@@ -4,14 +4,14 @@ using UnityEngine.SceneManagement;
 public class MySceneManager : MonoBehaviour
 {
 	public static MySceneManager instance;
+	public static bool youWin = false;
 
-	//Singleton
-	void Awake() 
+    //Singleton
+    void Awake() 
 	{
 		if (instance == null)
 		{
 			instance = this;
-			DontDestroyOnLoad(gameObject);
 		}
 		else
 		{
@@ -44,10 +44,12 @@ public class MySceneManager : MonoBehaviour
         SceneManager.LoadScene("Level4");
     }
 
-	public void RestartLevel() 
-	{
+    public void RestartLevel()
+    {
         UIManager.instance.ClosePause();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
+        UIManager.instance.isPaused = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public static void Lose()
@@ -57,17 +59,15 @@ public class MySceneManager : MonoBehaviour
 
 	public static void Win()
 	{
-		SceneManager.LoadScene("WinScene");
+        youWin = true;
+        SceneManager.LoadScene("Game Over");
 	}
 
 	public void Intro()
 	{
 		UIManager.instance.ClosePause();
 
-        if (MusicManager.instance != null)
-        {
-            MusicManager.instance.RestartMusic();
-        }
+        MusicManager.instance.RestartMusic();
 
         SceneManager.LoadScene("Home Menu");
 	}

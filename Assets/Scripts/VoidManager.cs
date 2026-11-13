@@ -1,15 +1,21 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class VoidManager : MonoBehaviour
 {
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	private void OnTriggerEnter2D(Collider2D other)
-	{
-		if (other.CompareTag("Player"))
-		{
-			PlayerController.Die();
-		}
-	}
-}
+    [SerializeField] private AudioClip VoidDeathSound;
+    private AudioSource audioSource;
 
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            AudioManager.instance.PlaySFX(VoidDeathSound);
+            PlayerController.Die();
+        }
+    }
+}

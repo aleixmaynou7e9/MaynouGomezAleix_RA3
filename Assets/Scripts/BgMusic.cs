@@ -29,7 +29,10 @@ public class MusicManager : MonoBehaviour
 
     public void PlayMusic()
     {
-        audioSource.Play();
+        if (audioSource != null && !audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
     }
 
     public void RestartMusic()

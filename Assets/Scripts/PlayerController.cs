@@ -1,11 +1,12 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerControlsActions
 {
-	[SerializeField] float speed = 5f;
+
+    public static PlayerController instance;
+    [SerializeField] float speed = 5f;
 	[SerializeField] float rayLength = 0.7f;
 	public LayerMask groundLayer;
 	private Rigidbody2D rb;
@@ -15,10 +16,13 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 	private RaycastHit2D hit;
 	private float moveInput;
 	private Animator animator;
+    private bool isDead = false;
+    [SerializeField] float deathDelay = 0.775f;
 
-	private void Awake()
+    private void Awake()
 	{
-		rb = GetComponent<Rigidbody2D>();
+        instance = this;
+        rb = GetComponent<Rigidbody2D>();
 		sp = GetComponent<SpriteRenderer>();
 		inputActions = new InputSystem_Actions();
 		inputActions.PlayerControls.SetCallbacks(this);
@@ -43,8 +47,9 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 	void Update()
 	{
 		Debug.DrawRay(transform.position, Vector2.down * rayLength, Color.red);
+        if (isDead) return;
 
-		switch (moveInput)
+        switch (moveInput)
 		{
 			case > 0:
 				sp.flipX = false;
@@ -60,7 +65,9 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 
 	void FixedUpdate()
 	{
-		rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
+        if (isDead) return;
+
+        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
 	}
 
 	bool IsGrounded()
@@ -71,13 +78,27 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 
 		return hit.collider != null;
 	}
+	
+    public static void Die()
+    {
+        if (instance != null && !instance.isDead)
+        {
+            instance.StartCoroutine(instance.DieRoutine());
+        }
+    }
+	
+    private IEnumerator DieRoutine()
+    {
+        isDead = true;
+        rb.linearVelocity = Vector2.zero;
+        animator.SetBool("die", true);
 
-	public static void Die() 
-	{
-		MySceneManager.Lose();
-	}
+        yield return new WaitForSeconds(deathDelay);
 
-	public void OnGravity(InputAction.CallbackContext context)
+        MySceneManager.Lose();
+    }
+
+    public void OnGravity(InputAction.CallbackContext context)
 	{
 		if (context.performed && IsGrounded())
 		{
@@ -90,7 +111,7 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 	{
 		moveInput = context.ReadValue<Vector2>().x;
 
-		animator.SetFloat("speed", Mathf.Abs(moveInput));
+		animator.SetBool("walk", Mathf.Abs(moveInput) > 0.01f);
 	}
 	
 }
