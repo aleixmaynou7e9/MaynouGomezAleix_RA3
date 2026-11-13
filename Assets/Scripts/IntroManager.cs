@@ -12,4 +12,9 @@ public class IntroManager : MonoBehaviour
 	{
 		SceneManager.LoadScene("Home Menu");
 	}
+
+	public void Exit()
+	{
+		Application.Quit();
+	}
 }
