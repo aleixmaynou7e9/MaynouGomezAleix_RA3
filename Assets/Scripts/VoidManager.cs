@@ -15,7 +15,7 @@ public class VoidManager : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             AudioManager.instance.PlaySFX(VoidDeathSound);
-            PlayerController.Die();
+            GameEvents.PlayerDie();
         }
     }
 }

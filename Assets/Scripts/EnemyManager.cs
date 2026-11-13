@@ -61,7 +61,7 @@ public class EnemyMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             AudioManager.instance.PlaySFX(DemonDeathSound);
-            PlayerController.Die();
-        }
+			GameEvents.PlayerDie();
+		}
     }
 }

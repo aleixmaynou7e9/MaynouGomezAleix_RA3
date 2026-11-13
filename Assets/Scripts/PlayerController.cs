@@ -37,11 +37,13 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 	private void OnEnable()
 	{
 		inputActions.Enable();
+		GameEvents.OnPlayerDie += Die;
 	}
 
 	private void OnDisable()
 	{
 		inputActions.Disable();
+		GameEvents.OnPlayerDie -= Die;
 	}
 
 	void Update()
@@ -79,7 +81,7 @@ public class PlayerController : MonoBehaviour, InputSystem_Actions.IPlayerContro
 		return hit.collider != null;
 	}
 	
-    public static void Die()
+    static void Die()
     {
         if (instance != null && !instance.isDead)
         {
